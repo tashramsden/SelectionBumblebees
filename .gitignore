@@ -1,0 +1,11 @@
+*~ 
+*.tmp
+*.out
+
+# latex
+*.aux
+*.bbl
+*.blg
+
+thesis/*.pdf
+thesis/figures/logo-eps-converted-to.pdf
