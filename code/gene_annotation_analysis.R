@@ -29,22 +29,21 @@ plot(TukeyHSD(mod, conf.level=.95), las = 2)
 # Tukey: all 3 spp pi sig diff - B. ruderatus lower than other 2
 
 all_pi$spp <- as.factor(all_pi$spp)
-all_pi$spp <- factor(all_pi$spp, levels=c("rud", "hort", "terr"))
+all_pi$spp <- factor(all_pi$spp, levels=c("hort", "terr", "rud"))
 
-# make separate dataframe of outliers to add jitter to plot
-outliers <- 
-    all_pi %>%
-    group_by(spp) %>%
-    filter(Smoothed.Pi > quantile(Smoothed.Pi, 0.75) + 1.5 * IQR(Smoothed.Pi) | 
-               Smoothed.Pi < quantile(Smoothed.Pi, 0.25) - 1.5 * IQR(Smoothed.Pi))
+# viridis colours for plot
+colours <- c("#5ec962", "#21918c", "#3b528b")
 
+# violin plot comparing nuc div among spp
 nuc_div_spp_plot <- ggplot(all_pi, aes(x=spp, y=Smoothed.Pi, col=spp)) +
-    geom_boxplot(alpha=0.05, outlier.shape=NA, size=1.5) +
-    geom_jitter(height = 0, width = 0.2, data = outliers, alpha=0.3) +
+    ## add all data points but make v faint (> 150,000 of them!!)
+    geom_point(position = position_jitter(seed = 1, width = 0.45), alpha=0.05) +
+    scale_colour_manual(values=c(colours)) +
+    geom_violin(alpha=0.05, size=2, col="black") +
     scale_y_continuous(expand=c(0,0.0008)) +
-    scale_x_discrete(labels=c(expression(italic("B. ruderatus")),
-             expression(italic("B. hortorum")),
-             expression(italic("B. terrestris")))) +
+    scale_x_discrete(labels=c(expression(italic("B. hortorum")),
+                              expression(italic("B. terrestris")),
+                              expression(italic("B. ruderatus")))) +
     labs(x="Species", y="Nucleotide Diversity") +
     theme_classic() +
     theme(axis.title = element_text(size=40),
@@ -52,14 +51,16 @@ nuc_div_spp_plot <- ggplot(all_pi, aes(x=spp, y=Smoothed.Pi, col=spp)) +
           axis.title.y = element_text(margin=margin(r=15)),
           axis.text = element_text(size=35),
           legend.position = "none") +
-    geom_signif(comparisons = list(c("rud", "hort"),
-                                   c("rud", "terr"),
+    geom_signif(comparisons = list(c("rud", "terr"),
                                    c("hort", "terr")),
-                map_signif_level=TRUE, textsize = 12, col="black")
+                map_signif_level=TRUE, textsize = 12, col="black") +
+    geom_signif(comparisons = list(c("rud", "hort")),
+                map_signif_level=TRUE, textsize = 12, col="black", y_position=0.0095)
+
 nuc_div_spp_plot
 
 ggsave(nuc_div_spp_plot,
-       file="../presentation/nuc_div_spp.jpg",
+       file="../presentation/nuc_div_spp_b.jpg",
        width=25, height=15)
 
 nuc_div_spp_plot <- nuc_div_spp_plot + 
@@ -68,6 +69,7 @@ nuc_div_spp_plot <- nuc_div_spp_plot +
           axis.title.y = element_text(margin=margin(r=10)),
           axis.text = element_text(size=20))
 nuc_div_spp_plot
+
 ggsave(nuc_div_spp_plot,
        file="../thesis/figures/supplementary_nuc_div_spp.pdf",
        width=15, height=10)
@@ -135,7 +137,7 @@ setdiff(hort_terr, rud_genes$gene)  # 5 genes shared hort + terr not rud
 
 
 # Functional categories - pie charts ----
-pie_cols <- c("#440154", "#414487", "#2a788e", "#22a884", "#7ad151", "#fca50a")
+pie_cols <- c("#440154", "#414487", "#2a788e", "#22a884", "#7ad151", "#fca50a")  # more viridis colours
 
 ## B. ruderatus functional categories ----
 
