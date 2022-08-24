@@ -1,0 +1,553 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage[margin=2cm]{geometry}  % for page margin
+
+\usepackage{graphicx}  % for plots
+\graphicspath{{figures/}}
+
+\usepackage{helvet}  % for font
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{setspace}  % for 1.5 line spacing
+\onehalfspacing
+
+\usepackage{lineno}  % for line nums
+
+\usepackage{graphicx}  % for figures
+\usepackage[font=small, labelfont=bf]{caption}
+
+\usepackage{url}  % for urls in biblio
+
+\usepackage{csvsimple}  % for making tables of gene lists from csv (in supplementary)
+\usepackage{booktabs}
+
+\usepackage[round, authoryear]{natbib}  % for better biblio
+
+%\title{Genomic Signals of Selection in three UK Bumblebee Species}
+%\author{Natasha Ramsden}
+%\date{August 2022}
+
+
+\begin{document}
+
+	\thispagestyle{empty}
+	
+	\begin{titlepage}
+		
+%		make margins same as rest (2cm) - for some reason being strange on title page
+		\newgeometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+		
+		\includegraphics[width=0.4\textwidth]{logo}
+		
+	    \vfill
+		
+		\begin{center}
+			
+			\huge	
+			\textbf{Genomic Signals of Selection in \linebreak three UK Bumblebee Species}
+			
+			\vspace{0.5cm}
+			
+			\LARGE
+			\textbf{Natasha Ramsden}
+			
+			\vspace{1cm}
+				
+			August 2022
+			
+			\vspace{0.5cm}
+			
+			\large
+			Word count: 5713
+			
+			\vfill
+		
+		    \large
+		    A thesis submitted in partial fulfilment of the requirements for the \linebreak degree of Master of Science at Imperial College London. 
+		    		
+		    \vspace{0.5cm}
+		    
+		    Submitted for the MSc in Computational Methods in Ecology and Evolution.	
+	
+		\end{center}
+	\end{titlepage}
+
+%	margin on this page being strange too - set manually inline w rest (2cm)
+	\newgeometry{left=3cm, right=3cm, top=2.5cm, bottom=2.5cm}
+	\normalsize
+
+    \section*{Declaration}
+    
+    FASTQ files containing raw restriction-site associated DNA sequencing (RAD-seq) data from 206 bumblebees were provided by Dr Peter Graystock, as well as metadata regarding the species, sex and sibling-status of each sample. Sample sites and study species were chosen, samples collected, and DNA extracted and sequenced prior to my analyses. All subsequent work is my own.
+
+    
+    \section*{Acknowledgements}
+    
+    With many thanks to my supervisor Dr Peter Graystock for his invaluable advice and encouragement, and to the rest of my lab group for their support. I also acknowledge the computational resources and support provided by the Imperial College Research Computing Service (\url{http://doi.org/10.14469/hpc/2232}).
+    
+    \section*{Keywords}
+    
+    \emph{Bombus terrestris}, \emph{Bombus hortorum}, \emph{Bombus ruderatus}, RAD-seq, ecological genomics, adaptive potential.
+    
+    \newpage
+    
+    
+    \begin{linenumbers} 
+    \restoregeometry
+    
+    
+    \abstract
+    
+%   191 words -> 190
+
+    Bumblebees are globally critical pollinators facing a multitude of interacting environmental pressures. Limited evidence is available on how these species are responding, although divergent population trends within the genus suggest that some species are more able to adapt than others. I have used restriction-site associated DNA sequencing (RAD-seq) data to identify and characterise signals of selection within two widespread bumblebee species, \emph{Bombus terrestris} and \emph{Bombus hortorum}, and one declining species, \emph{Bombus ruderatus}. Higher levels of nucleotide diversity and a greater number of genomic regions under selection were detected in \emph{B. terrestris} and \emph{B. hortorum}, suggesting that \emph{B. ruderatus}' decline may be linked to its relative inability to adapt. Genes with diverse functions were found to be under selection in all three species, demonstrating a range of responses to the multiple stresses they face.
+    The threat to these pollinators from pesticide exposure is highlighted by the potential adaptation to this pressure found in the neurological genes of all three species.
+%    Neurological genes potentially adapting to pressures from pesticide exposure were common to these species, highlighting this as an important threat to these pollinators. 
+    Overall, RAD-seq analyses can provide valuable insight into the adaptive potential of non-model organisms; the environmental stresses they face; and the ways in which species are responding to selective pressures.
+    
+
+
+    \newpage
+    
+
+%		REMOVE NEW PAGES WHERE NOT NECESSARY!
+
+
+    \section{Introduction}
+
+%	bumblebees - pollinators - importance + declines - stressors
+
+	Bumblebees are globally critical pollinators: many crop yields are enhanced by or dependent on their visitation, making them economically important and vital for food security \citep{goulson_conserving_2003, sun_genus-wide_2021}. With numerous wildflowers sustained exclusively by bumblebees, their role in ecosystem stability is also crucial \citep{goulson_decline_2008, cameron_global_2020}. Many species of bumblebee (\emph{Bombus sp.}) however have been facing population decline in recent decades. Agricultural intensification has brought increased pesticide exposure as well as severe loss and fragmentation of habitat and foraging flora. Combined with the threats of climate change and parasites, these stressors have interacted to drive the decline of many native bumblebees \citep{carvell_declines_2006, oliver_interactions_2014, soroye_climate_2020, outhwaite_agriculture_2022}. Despite being so critical, limited evidence is available on how bumblebee species are adapting to the pressures they face.
+	
+%	stress -> selection
+	
+	Stresses in the environment act as selective forces on those populations experiencing them. Along with mutation, genetic drift and demography, natural selection leaves its signature within the genomes of affected populations by disrupting the null expectations of various genetic distributions \citep{hohenlohe_using_2010, vitti_detecting_2013}. Therefore, scrutiny of genomic regions displaying outlier characteristics can point to candidate genes undergoing selection \citep{whitlock_reliable_2015, hoban_finding_2016, ahrens_search_2018}. Functional annotation of these genes can then help to make links between environmental factors and population dynamics, enabling understanding of how species are responding to environmental stress and their ability to adapt to future pressures \citep{hohenlohe_population_2010, pracana_fire_2017, buckley_restriction_2018, mollion_patterns_2017}. 
+	Recently, an abundance of molecular tools, techniques and theories have been developed to explore these lines of analysis \citep{bourgeois_overview_2021}. 
+
+%	advances in genomic techniques SELECTION
+
+	Advances in next-generation sequencing technologies during the last two decades have meant that selection analyses have become increasingly affordable and possible to implement in non-model species \citep{van_dijk_ten_2014, hu_next-generation_2021}. 
+	For example, reduced-representation approaches such as restriction-site associated DNA sequencing (RAD-seq) allow tens of thousands of genetic markers to be collected from many individuals at a fraction of the cost of sequencing entire genomes \citep{miller_rapid_2007, baird_rapid_2008, andrews_harnessing_2016}. 
+	More than earlier reduced-representation approaches like microsatellites, RAD-seq allows a representative view of large portions of the genome to be gained due to the quantity of markers attainable \citep{davey_radseq_2010, lozier_revisiting_2014, catchen_unbroken_2017, sunde_comparing_2020}. 
+	Combined with the increasing availability of published reference genomes which genetic markers can be aligned to, it is possible to achieve a genome-wide view of classical genetic statistics \citep{manel_genomic_2016}. Genome baselines of these statistics can be used as null demographic models against which to detect outlier regions that may be caused by the locus-specific effects of genetic processes such as selection \citep{hohenlohe_using_2010, hohenlohe_population_2012, chavez-galarza_signatures_2013, sunde_comparing_2020}.
+	
+%	selection pressures of bumblebees + likely effects on genomes
+	
+	Due to the multiple and combined environmental stresses that bumblebees face, varied genomic changes are likely occurring in adaptation to these selective pressures \citep{potts_global_2010, colgan_genomic_2022}. 
+	Based on the pressures facing bumblebees, I have identified potentially key targets of selection.
+	Physical changes through morphogenesis could be expected in response to a changing climate and physical landscape;
+%	Pollinators are expected to respond to climate and land use changes with morphological and behavioural adaptations; 
+	these may for example equip pollinators with resistance to temperature stress or allow shifts in their geographic ranges \citep{jackson_local_2020, maebe_bumblebee_2021}. 
+	Neurological adaptations could occur in response to sub-lethal pesticide exposure since the majority of pesticides are neurotoxins known to have detrimental impacts on non-target pollinators
+%	Sub-lethal pesticide exposure is known to have detrimental neurological impacts on non-target pollinators; neurological adaptations may be linked with resistance to exposure to these neurotoxins 
+	\citep{siviter_quantifying_2018, bebane_effects_2019, colgan_caste-_2019, roat_using_2020}. 
+%	Changes in immune-related genes may confer resistance to diseases or parasites
+	Disease and parasite exposure may lead to adaptations in immune-related genes, as well as behavioural changes 
+	\citep{fouks_recognition_2011, ellis_patterns_2012}. 
+	However, those species that have been facing population decline in recent years may have been unable to adapt to these increasing selective pressures and therefore fewer signals of selection could be expected within their genomes. 
+	
+%	B. terrestris, hortorum and ruderatus - spp trends
+	
+	Three of the UK's bumblebee species have been exhibiting opposing population trends: the buff-tailed (\emph{Bombus terrestris}), garden (\emph{Bombus hortorum}) and ruderal (\emph{Bombus ruderatus}) bumblebees. 
+	\emph{B. terrestris} remains widespread contrary to the genus-wide population contractions; \cite{colgan_genomic_2022} recently found evidence of selection in multiple parts of the \emph{B. terrestris} genome using whole-genome sequencing. \emph{B. hortorum} and \emph{B. ruderatus} are closely related, cryptic species but their populations have undergone divergent trends. Whilst the majority of long-tongued bumblebees such as these have been in decline, \emph{B. hortorum} remains common \citep{ellis_delineating_2005, wood_targeted_2015, maebe_microsatellite_2015}. 
+
+%	aims + hypotheses
+
+	The aim of this work is to identify and characterise signals of selection in these three species using RAD-seq data previously collected from 206 individuals at four sites in the UK. 
+	I will compare any detected signals of selection between the bumblebees and test the hypothesis that \emph{B. ruderatus} has been less able to respond to selective pressures, which could explain its population decline.
+%	undergone different selective events
+%	, which could underpin their diverging trends. 
+	I aim to functionally annotate genes associated with selection to provide environmental context and understand the potential drivers and consequences of selection. I hypothesise that many loci affected by selection will be related to morphological, neurological and immune system changes. 
+%	strongly affected by selection will be related to the environmental strains that these species face.
+	RAD-seq data has been used previously to detect selection in non-model organisms but not in bumblebees \citep[e.g.][]{blanco-bercial_new_2016, kang_population_2017, leiva_population_2019, de_jong_detecting_2021}. I will therefore test the final hypothesis that RAD-seq is a useful tool for selection analyses. By qualitatively comparing signals of selection identified in \emph{B. terrestris} to the findings of \cite{colgan_genomic_2022}, I will be able to assess the success of RAD-seq for this purpose. Selection has not been investigated in \emph{B. hortorum} or \emph{B. ruderatus} and so this work will be novel.
+	Identifying signals of selection in these species will provide insight into their divergent population trends and adaptive potential \citep{woodard_molecular_2015, powney_widespread_2019}. This will be important in informing targeted conservation strategies. 
+	
+%	993 words -> 1027
+
+
+% compare rud + hort (old)
+% Both species are specialised feeders of flowers from the Fabaceae family, the abundance of which have decreased with the loss of unimproved flower-rich grasslands \citep{goulson_causes_2005, goulson_population_2011}. The continued abundance of \emph{B. hortorum}, contrasted with the decline and fragmentation of its close relative \emph{B. ruderatus}, has therefore been a quandary. 
+
+%	A range of explanations have been proposed: firstly, \emph{B. hortorum} have been classified as dominant crop pollinators unlike \emph{B. ruderatus} \citep{powney_widespread_2019}. The roll-out of agri-environment schemes since the 1990s may have benefitted species more closely integrated with the agricultural landscape \citep{kleijn_how_2003}. The historic ranges of the two species have also been compared: \emph{B. ruderatus} has historically had a relatively smaller population restricted to the south of the UK \citep{edwards_bees_2012, powney_widespread_2019}. Inherently, smaller and more fragmented populations are more susceptible to loss through stochastic processes whilst larger populations are more likely to sustain higher genetic diversity and therefore be equipped to adapt to changing conditions \citep{soule_effective_1987, goulson_decline_2008}. These two species have differing emergence times with \emph{B. hortorum} emerging earlier in the year than \emph{B. ruderatus} \citep{edwards_bees_2012}. This may be advantageous to \emph{B. hortorum} if earlier emergence allows unrivalled access to nesting sites and could also mean that \emph{B. ruderatus} queens emerging later have limited choices for colony founding \citep{goulson_decline_2008}. Finally, interspecific competition may be relevant since both species are Fabaceae specialists. With the decline in deep-flowered food sources, it is possible that this habitat is able to support one species, \emph{B. hortorum}, to the exclusion of the other \citep{goulson_causes_2005}.
+%	
+%	% Other suggestions have been proposed to explain the differing population trends of these relatives, such as their foraging ranges and the comparatively greater impact of agricultural intensification in the south of the UK which could disproportionately affect \emph{B. ruderatus}. 
+%	
+%	%	other suggestions eg foraging range etc
+%	%	Agri intensification esp in south - bad for spp confined there, eg rud
+%	
+%	%   this study - 2 closely related spp - description - pop trends - discussion of differences
+%	
+%	%	long-tongued
+%	%	widespread vs restricted range
+%	%	crop vs not pollinators (links w agri-env schemes)
+%	%	"starting" ranges - ruderatus already more restricted/smaller pop -more susceptible to loss & south - subject to more agri intensification / edge of range?
+%	%	emergence times	
+%	%	competition - both forage on declined Fabaceae spp -> one outcompeted
+%
+
+
+   
+   
+    \section{Methods}
+    
+%    1472 words atm  -> 1459
+    
+    	\subsection{Data}
+
+    	Prior to this study 206 female bumblebees were collected from four sites in the South of England, each site being more than 30km from its nearest neighbour (Fig. \ref{fig:Bee sample sites}). RAD sequencing was performed using the SgrAI restriction enzyme to extract genetic markers throughout the genome of each sampled individual. These markers were provided to me in FASTQ data files. Prior to my work, species identity was confirmed through morphological and genetic scrutiny. Haploid males and siblings had been previously identified (using Genepop and Colony). I removed all males; per sibling group all but one sample with the highest number of retained reads were removed to reduce genetic over-representation bias.
+    	
+    	\begin{figure}[ht!]
+    		\centering
+    		\includegraphics[width=0.88\linewidth]{bee_map.png}
+    		\captionsetup{width=0.88\linewidth}
+    		\caption{\textbf{Bumblebees collected from four sites within England}: Upton, Hillesden, Ouse Washes and Caistor (central coordinate: 52$^{\circ}$16'05"N, -0$^{\circ}$17'50"E). Buffers with 15km radii have been plotted to delimit the separate field sites. Counts of each species collected at each site following all sample filtering are included: 178 bumblebees in total. Created using Tableau (v2022.2).}
+    		\label{fig:Bee sample sites}
+    	\end{figure}
+    	
+    	
+    	\subsection{Bioinformatics Processing}
+
+%		think about whther any assay plots needed in supplementary???
+    	
+    	To demultiplex the FASTQ samples and to discard any reads with a raw quality (phred) score of less than 10, I used the Stacks (v2.62) program \emph{process\_radtags} \citep{catchen_stacks_2013}. Following an assay of the log files produced, I removed samples which retained fewer than a million reads \citep{rochette_deriving_2017, rivera-colon_population_2021}. 
+    	
+    	No reference genome is available for \emph{B. ruderatus}. However, since \emph{B. hortorum} and \emph{B. ruderatus} are closely related, samples from both species were aligned to the \emph{B. hortorum} reference genome available on the NCBI Genome database \citep{ellis_delineating_2005, ncbi_iybomhort11_2021, sayers_database_2022}.
+    	These, as well as the \emph{B. terrestris} samples, were additionally aligned to the annotated \emph{B. terrestris} reference genome \citep{ncbi_iybomterr12_2022} to allow functional categorisation of detected outlier loci. Alignments were carried out using BWA (v0.7.17) \emph{index} and \emph{mem} \citep{li_fast_2009, li2013aligning}.
+%    	All outlier detection methods were repeated for samples aligned to each reference genome separately.
+		Samples aligning less than 60\% to the reference genomes were removed \citep{rochette_deriving_2017}.
+    	I used Samtools (v1.15.1) to sort the resulting SAM files and convert them to BAM format \citep{danecek_twelve_2021}. A catalogue of genotyped RAD loci was then built using Stacks' \emph{ref\_map} pipeline \citep{catchen_stacks_2013}. 
+
+		
+		\subsection{Identifying Signals of Selection}
+		
+		To detect genomic regions which may have undergone selection, I calculated nucleotide diversity ($\pi$) across the genome of each species. This genetic statistic can give insight into different types of selection within a populations' genome. Significantly reduced nucleotide diversity can be indicative of past selective sweeps during which genetic variation was reduced in a genomic region due to linkage disequilibrium with the selected variant \citep{hohenlohe_population_2012, mollion_patterns_2017, pracana_fire_2017}. Alternatively, significantly elevated $\pi$ within a population suggests that multiple alleles are being maintained at a locus, which is a signal of balancing selection \citep{davey_radseq_2010, hohenlohe_using_2010}.
+		
+		I used Stacks' \emph{populations} programme to calculate $\pi$ at each variant site according to Equation \ref{eq:nuc_div} \citep{catchen_stacks_2013}:
+%		; in this software nucleotide diversity is calculated as in 
+		
+		\begin{equation}
+			\pi = 1 - \frac{\sum{n_i \choose 2} \\~\\}{{n \choose 2} \\~\\}
+			\label{eq:nuc_div}
+		\end{equation}
+		
+		In which $n_i$ is the count of allele $i$ in the population and $n$ is the sample size of all alleles in the population at this variant site \citep{hohenlohe_population_2010}. RAD loci present in fewer than 50\% of samples were excluded (\emph{populations} parameter: --min-samples-per-pop 0.5). 
+		
+		To detect outlier regions and account for spatial autocorrelation along the genome, I transformed these point calculations into a continuous set of values along the genome using Stacks' \emph{populations} with the flag --smooth \citep{catchen_stacks_2013}.
+		This calculates a kernel-smoothed average of $\pi$ in windows along the genome. Each successive single nucleotide polymorphism (SNP) becomes the centre of a window which is distributed normally; assigning more weight to sites in the window's centre. Overlapping RAD loci were removed to avoid duplication and therefore over-representation from a single genomic region. 
+%		Areas of the genome where no RAD locus is present are excluded.
+		
+		Window size is determined by the standard deviation ($\sigma$). I used VCFtools (v0.1.17) to estimate the average number of SNPs in a window given different values of $\sigma$ \citep{danecek_variant_2011}. I determined a minimum value of $\sigma$ that would ensure than on average 10 SNPs were present per window \citep{buckley_restriction_2018}. Following this, I ran \emph{populations} with different values of $\sigma$ between 100 - 200 kb from which I chose a final window size. 
+		
+		Statistical significance of smoothed windows can be determined in Stacks by implementing bootstrap resampling \citep{hohenlohe_population_2010, catchen_stacks_2013}. For each window, sampling with replacement from genome-wide loci allows a null empirical distribution to be generated. By comparing this to observed $\pi$ within windows, a p-value can be assigned to genomic regions and therefore genome-wide demographic effects should be distinguishable from the localised effects of selection \citep{hohenlohe_population_2012, ahrens_search_2018}. I increased the default number of bootstrap replicates from 100 to 10,000 to increase statistical power. 
+		
+		\subsubsection{Hidden population structure in \emph{B. ruderatus}}
+		
+		A prior study of this data identified distinct genetic sub-populations within the \emph{B. ruderatus} samples, whilst \emph{B. terrestris} and \emph{B. hortorum} demonstrated no population structure.
+		Signals of selection from statistics like nucleotide diversity can be skewed by hidden population structure \citep{hohenlohe_using_2010}. For example, a region of high $\pi$ could suggest balancing selection is acting, however there may be directional selection in the sub-populations which is hidden by the sample grouping. Therefore, additional selection searches were carried out in the \emph{B. ruderatus} samples to account for population structure between the geographic locations. 
+		
+		Multiple tests were performed and compared to better understand the signals of selection demonstrated. Firstly, kernel-smoothed F\textsubscript{ST} was calculated along the genome. This measure of pairwise-population differentiation is expected to be significantly increased at loci under local positive selection compared to neutral sites \citep{weigand_detecting_2018}. The same parameters as in the $\pi$ calculations were implemented, with sub-populations additionally defined by geographic location. 
+		F\textsubscript{ST} was compared to $\pi$ to assess the type of selection signalled by these statistics.
+		
+		I used Stacks' \emph{populations} to output SNPs from the \emph{B. ruderatus} samples to variant call format (VCF). SNPs with a minor allele frequency less than 0.05 (--min-maf 0.05) were excluded as these almost-monomorphic sites would be uninformative for the subsequent analyses \citep{foll_genome-scan_2008, whitlock_reliable_2015}. Only one representative SNP per RAD locus was retained in order to avoid bias from physical linkage (--write-single-snp) \citep{drinan_population_2018, leiva_population_2019}.
+		
+		Using this data I implemented PCAdapt (v4.3.3) in R (v4.2)  \citep{duforet-frebourg_detecting_2016, luu_pcadapt_2017, prive_performing_2020, r_core_team_r_2022}. PCAdapt uses principal component analysis to identify population structure; divergent selection candidates are identified as outliers based on their relation to this structure. I first used PLINK (v1.9) to convert the VCF files to bed format \citep{chang_second-generation_2015, purcell_plink_2007, purcell_plink_2022}. Scree and score plots were examined to determine the appropriate number of principal components, K. Outlier SNPs were identified following Bonferroni correction (p corrected $\leq$ 0.05).
+		
+		Finally, I applied BayeScan (v2.1) \citep{foll_genome-scan_2008}. This Bayesian approach executes a reversible-jump Markov Chain Monte Carlo (MCMC) algorithm to estimate the posterior probability that F\textsubscript{ST} at each locus is described by locus-specific effects additional to population-specific factors. If the locus-specific component is necessary to explain F\textsubscript{ST}, this indicates that the locus is a selection candidate. An $\alpha$ value is also assigned which indicates whether the candidate locus is under directional or balancing selection. 
+		The VCF files were converted to BayeScan format using PGDSpider \citep{lischer_pgdspider_2012}. BayeScan was run with default parameters with the addition of a higher thinning interval of 50 to reduce autocorrelation. 
+%		I compared results with simulations using prior odds of 100 rather than 10 which may reduce false positives but also lack power in detecting true signals of selection. 
+		Each simulation was repeated four times to check chain convergence; trace plots were visually assessed for efficiency. I used a strict false discovery rate (\emph{q-value}) of 0.05 to identify outliers. 
+%		bayescan good - fewer false +ves than other methods, no bias from small sample sizes etc!
+		
+		I classified genes potentially under selection in \emph{B. ruderatus} as those identified by at least two of these three population-differentiation based tests, discarding other outliers to reduce false positives.
+		
+
+		\subsection{Gene Annotation}
+		
+%		Genes were identified within $\pi$ outlier windows 2*$\sigma$ basepairs wide.
+		Once outlier windows of $\pi$ were detected, genes were identified within these 2*$\sigma$ basepair regions. 
+		For \emph{B. terrestris}, genes could be identified directly from the annotated reference genome using NCBI's Genome Data Viewer \citep{rangwala_accessing_2021}. The \emph{B. hortorum} genome is not yet annotated and so outlier regions detected in \emph{B. ruderatus} and \emph{B. hortorum} were first locally aligned to the \emph{B. terrestris} genome using NCBI's nucleotide BLAST, following which genes could be identified \citep{altschul_basic_1990}. The same process was used to identify the gene present at the SNP site of PCAdapt and BayeScan outliers for \emph{B. ruderatus}. 
+		
+		From these gene lists I used DAVID 2021 (v2022q2) to extract a list of gene names and their associated gene ontology (GO) terms \citep{huang_systematic_2009, sherman_david_2022}. Significantly enriched GO terms within each species were identified using DAVID's Functional Annotation Chart, using all \emph{B. terrestris} genes as the background and with significance determined by Bonferroni correction. Using a combination of GO terms and literature searches for each outlier gene, I classified genes into broad putative functional categories \citep{ashburner_gene_2000, the_gene_ontology_consortium_gene_2021}. 
+		
+		
+%all genes from bterr...
+%		********literature search inc other organsims - preference for function in bees, drosophila then others!!!!
+		
+		
+%		blastn (using acceptance parameters: eval $<$ 0.01, percent alignment $>$ 90\%)
+      	
+%      	BAYESCAN
+%		small sample size .. no bias ... risk of low power
+
+% silva et al pop genomics of b terr: BayeScan was run using a matrix of SNP genotypes, with prior odds for the neutral model turned to five and assuming a detection threshold of 0.05. The remaining parameters were set to default values. Plots and convergence were checked using the R script plot_R.r available within the BayeScan package, and the package CODA v.0.19-1 
+      	
+      
+    \section{Results}
+    
+    %    MAX- 6-8 figures/tables
+    
+%    866 words -> 899
+
+	During quality filtering four samples were removed from the study, a further four were removed due to poor alignment to the reference genomes. Remaining sequences of \emph{B. terrestris} aligned to their reference genome on average 96.35 $\pm$ 0.85 \% (mean $\pm$ SE). \emph{B. hortorum} and \emph{B. ruderatus} samples aligned on average 98.13 $\pm$ 0.43 \% and 96.78 $\pm$ 0.86 \% respectively to the \emph{B. hortorum} reference genome. There was not a significant difference between these two species' alignments, and therefore aligning \emph{B. ruderatus} sequences to the \emph{B. hortorum} genome should be suitable (t-test(94.4) = -1.4, p = 0.16). Alignment of these two species' sequences to the annotated \emph{B. terrestris} genome however was significantly lower (\emph{B. hortorum}: mean 76.77 $\pm$ 0.45 \%, t(147.5) = -34.6, p $<$ 0.01; \emph{B. ruderatus}: mean 78.61 $\pm$ 0.78 \%, t(126.8) = -15.7, p $<$ 0.01). Therefore, all subsequent analyses of \emph{B. hortorum} and \emph{B. ruderatus} were only performed with their sequences aligned to the \emph{B. hortorum} reference genome. Following removal of males and surplus siblings, 178 samples remained of the original 206 that were collected. Sequences from 67 \emph{B. hortorum}, 56 \emph{B. ruderatus} and 55 \emph{B. terrestris} individuals were included in the final selection analyses (see Fig. \ref{fig:Bee sample sites} breakdown of samples by geographic location). 
+    	
+	Following RAD locus filtering of these samples in Stacks' \emph{populations}, 28,860 SNPs were identified in the \emph{B. terrestris} sequences. 39,341 and 19,488 SNPs were identified in \emph{B. hortorum} and \emph{B. ruderatus} respectively. These SNPs became the centroids of the kernel-smoothing windows, which were assigned a standard deviation, $\sigma$, value of 150 kb.
+  		
+  	\begin{figure}[ht!]
+  			\centering
+  			\includegraphics[width=0.9\linewidth]{terr_pi.pdf}
+  			\captionsetup{width=0.88\linewidth}
+  			\caption{\textbf{Genome-wide nucleotide diversity ($\pi$) in \emph{B. terrestris}}. Smoothed distribution of $\pi$ (black line) along the 18 linkage groups of \emph{B. terrestris} (white and grey vertical shading; total length 393Mb  \citep{ncbi_iybomterr12_2022}). Orange vertical bars indicate the 13 regions of significantly elevated $\pi$ (bootstrap p$\leq$1$\times$10\textsuperscript{-4}); the blue triangle highlights the region shared by all three species.}
+  			\label{fig:terr_pi}
+  	\end{figure}
+  	
+    Average nucleotide diversity in \emph{B. terrestris} was 1.82 $\times$ 10\textsuperscript{-3}. 13 regions of the genome had significantly elevated $\pi$ values compared to the genome-wide baseline, with bootstrap p-values $\leq$ 1$\times$10\textsuperscript{-4} (Fig. \ref{fig:terr_pi}). 
+    Within \emph{B. hortorum}, nucleotide diversity was on average 2.07 $\times$ 10\textsuperscript{-3}. Here, 10 regions exhibited significantly elevated $\pi$ values (p$\leq$1$\times$10\textsuperscript{-4}, Fig. \ref{fig:hort_pi}). 
+    \emph{B. ruderatus} had the lowest average $\pi$ of 1.19 $\times$ 10\textsuperscript{-3} and four regions of significantly elevated $\pi$ were detected (p$\leq$1$\times$10\textsuperscript{-4}, Fig. \ref{fig:rud_pi_fst}A).
+    There was a significant difference between $\pi$ among the three species (Fig. \ref{Sfig:nuc_div_spp}; one-way ANOVA: F(2, 153734) = 8517, p $<$ 1$\times$10\textsuperscript{-10}; post-hoc Tukey confirmed all pairwise species differences were significant, p $<$ 1$\times$10\textsuperscript{-10}). 
+    	
+%    	add +/- SE to pi ests + test w anova if spp sig diff!
+    
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[width=0.9\linewidth]{hort_pi.pdf}
+			\captionsetup{width=0.88\linewidth}
+			\caption{\textbf{Genome-wide nucleotide diversity ($\pi$) in \emph{B. hortorum}}. Smoothed distribution of $\pi$ (black line) along the 18 linkage groups of \emph{B. hortorum} (white and grey vertical shading; total length 296Mb \citep{ncbi_iybomhort11_2021}). Orange vertical bars indicate the 10 regions of significantly elevated $\pi$ (bootstrap p$\leq$1$\times$10\textsuperscript{-4}); the blue triangle highlights the region shared by all three species.}
+			\label{fig:hort_pi}
+		\end{figure}
+
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[width=0.9\linewidth]{rud_pi_fst.pdf}
+			\captionsetup{width=0.88\linewidth}
+			\caption{\textbf{Genome-wide (A) nucleotide diversity ($\pi$) and (B) F\textsubscript{ST} in \emph{B. ruderatus}}. Smoothed statistics along the 18 linkage groups of the \emph{B. hortorum} reference genome (white and grey vertical shading). \textbf{(A)} Smoothed $\pi$ (black line) from all individuals. Orange vertical bars indicate the four regions of significantly elevated $\pi$ (bootstrap p$\leq$1$\times$10\textsuperscript{-4}); the blue triangle highlights the region shared by all three species. \textbf{(B)} Smoothed F\textsubscript{ST} between each pairwise geographic location comparison. Red arrows indicate regions of significantly locally elevated F\textsubscript{ST} in at least one pairwise comparison (bootstrap p$\leq$1$\times$10\textsuperscript{-4}).}
+			\label{fig:rud_pi_fst}
+		\end{figure}
+
+		Within their outlier windows, each covering at least 300 kb, \emph{B. hortorum} had 169 genes, the most of any species. \emph{B. terrestris}' outlier windows contained 136 genes and \emph{B. ruderatus} had the fewest genes at 89 (Tables \ref{STab:rud_genes}-\ref{STab:terr_genes}). Of the 348 unique genes identified in total, 15 were common to all three species (Fig. \ref{fig:venn_pi}). Within each species, more than a third of the genes identified were uncharacterised. The  most represented functional category for \emph{B. terrestris} and \emph{B. hortorum} was morphogenesis, and for \emph{B. ruderatus} it was neurology (Fig. \ref{fig:cat_pies}). Neurology, morphogenesis and long non-coding RNAs were the top three categories for all species. Immunity-related genes represented the next largest category for \emph{B. hortorum} but within the other two species this category was poorly represented. In \emph{B. hortorum}, genes encoding insect cuticle protein constituents were significantly enriched (Bonferroni p=0.018). No other functions were significantly enriched in any of the species.
+	
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[width=0.35\linewidth]{venn_pi.pdf}
+			\captionsetup{width=0.88\linewidth}
+			\caption{\textbf{Number of genes identified} within regions of significantly elevated nucleotide diversity (bootstrap p$\leq$1$\times$10\textsuperscript{-4}) in each bumblebee species.}
+			\label{fig:venn_pi}
+		\end{figure}
+	
+
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[width=0.88\linewidth]{cat_pies.pdf}
+			\captionsetup{width=0.88\linewidth}
+			\caption{\textbf{Functional categories} of the genes identified within regions of significantly elevated nucleotide diversity for each species. Categories determined according to gene ontology and wider literature searches for each gene (Supplementary tables S1-S3). "Other" consists of all genes whose functions were not the three main functions of interest (neurology, morphogenesis and immunity), or the other most represented groups (uncharacterised and long non-coding RNAs).}
+			\label{fig:cat_pies}
+		\end{figure}
+
+%		The samples from \emph{B. terrestris} and \emph{B. hortorum} effectively represent a single population for each species since no population structure has been detected within their samples. I briefly assessed these two species using PCAdapt which confirmed the lack of population structure found by other studies and previous work using these samples \citep{colgan_genomic_2022}. Within these panmictic populations, regions of elevated $\pi$ suggest that balancing selection may be acting within some genes in these regions. 
+
+		In \emph{B. ruderatus} several regions of elevated $\pi$ were detected, however hidden population structure can affect the interpretation of these results. PCAdapt confirmed the presence of population structure in \emph{B. ruderatus} where two principal components, K=2, were appropriate to explain the sample variation. It is therefore necessary to compare results from multiple selection tests to understand the signals of selection in this species.
+		
+		One region of elevated $\pi$ in linkage group HG995199.1 co-occurred with a region of significantly elevated F\textsubscript{ST} between the Hillesden and Ouse populations (Fig. \ref{fig:rud_pi_fst}). This suggests that divergent selection could be acting on different alleles between the populations; this hypothesis is further supported by the detection of an outlier SNP within this region by PCAdapt. Within this window three genes were detected but all are currently uncharacterised. No other regions of elevated $\pi$ overlap with significantly elevated F\textsubscript{ST} or PCAdapt or BayeScan outliers. Therefore, selection within the remaining three $\pi$ windows of \emph{B. ruderatus} may be balancing. 
+		
+		A total of 33 outlier SNPs were detected by PCAdapt in \emph{B. ruderatus} (Bonferroni p $<$ 0.05, Table \ref{STab:pcadapt_genes}) and seven by BayeScan (\emph{q-value} $<$ 0.05, Table \ref{STab:bayescan_genes}). All BayeScan outliers were assigned a positive $\alpha$ value indicating that they are undergoing directional selection. 
+		Six SNPs were identified as outliers by at least two of the population-differentiation tests, all of which were detected by BayeScan (Fig. \ref{fig:rud_heat}). Four of these SNPs occurred within genes, three of which are characterised and relate to morphogenesis (LOC100651177: serine proteinase stubble, BayeScan \emph{q}=1.4$\times$10\textsuperscript{-3} and LOC100643645: protein pangolin, \emph{q}=0.015) and neurology (LOC100647201: alpha-2b adrenergic receptor, \emph{q}=6.4$\times$10\textsuperscript{-3}).
+		
+		Allele frequency at these SNPs was visually inspected across the geographic locations to understand the direction of selection (Fig. \ref{fig:rud_heat}). 
+		A one-way ANOVA revealed that there was a significant difference among major allele frequency at the three geographic locations (F(2, 15) = 22.9, p $<$ 0.001).
+		Within the Ouse population, major allele frequency was significantly higher than Hillesden or Upton at on average 0.97 $\pm$ 0.01 (post-hoc Tukey p $<$ 0.005). This indicates that the major allele at these outlier SNPs within the Ouse population is fixed or almost fixed. 
+		
+%		\begin{figure}[ht!]    PUT INTO SUPPLEMENTARY...!
+%			\centering
+%			\includegraphics[width=0.9\linewidth]{dir_genes_heatmap.pdf}
+%			\captionsetup{width=0.88\linewidth}
+%			\caption{\textbf{Major allele frequency at outlier SNPs under directional selection within \emph{B. ruderatus} across the geographic locations}. Genes (NCBI gene symbol) identified at the SNP sites determined to be under selection by BayeScan (FDR $<$ 0.05) and PCAdapt (Bonferroni p $<$ 0.05). The nine SNPs occurring in regions of the genome containing no gene have been labelled "No gene".}
+%			\label{fig:heat}
+%		\end{figure}
+		
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[width=0.9\linewidth]{rud_heatmap.pdf}
+			\captionsetup{width=0.88\linewidth}
+			\caption{\textbf{Major allele frequency at outlier SNPs under directional selection within \emph{B. ruderatus} across the geographic locations}. Genes (NCBI gene symbol) identified at the SNP sites determined to be under selection by at least two of the population-differentiation based tests: kernel-smoothed F\textsubscript{ST} (bootstrap p $\leq$ 1$\times$10\textsuperscript{-4}), BayeScan (\emph{q} $<$ 0.05), PCAdapt (Bonferroni p $<$ 0.05). Crosses indicate which tests an outlier SNP was identified by. The two SNPs occurring in regions of the genome containing no gene have been labelled "No gene". Order determined by BayeScan \emph{q-value} from most to least significant SNP.}
+			\label{fig:rud_heat}
+		\end{figure}
+		
+%    \newpage
+
+%   		detected outliers - searched for in bter1.2 genome, and when aligned to hort used blastn - all accepted results were >95\% identical to query sequence and had e-value < 0.001
+
+		%		don't have haplotype data - can be estimated for diploid organisms - but uncertainty - instead use males - haploid / whole genome data..?
+			
+%		PROB DOESN'T NEED INCLUDING - BUT IS JUSTIFICATION - AND USEFUL! hohenlohe 2010 population "Note that this 2sigma margin includes locations that may contribute to a highly significant average value of a statistic, even if the value for the genomic region directly over the gene is not as significant.	We took this 	approach in order to cast a wide net for selection on potential 	candidate genes, including their associated cis-regulatory regions" 
+% 		+ also from this paper - size of linkage disequilib: "most natural populations, the likely size is on the order of 1 to 100 kb, meaning that tens or hundreds of thousands of markers are required to adequately cover an average-sized genome" 
+%	also window size = inc regions linkage - autocorr - but try not group unlinked 
+
+		
+		
+   		
+    \section{Discussion}
+    
+%    1881 words  -> 2139! -> 2154
+    
+    	% open - detected signals of selection in three uk bumblebees
+
+		Using multiple genomic tests, I have identified regions within the genomes of three bumblebee species which appear to have been subject to selective pressures. These signals of selection vary in 
+%    	I have used multiple genomic tests to understand the signatures of selection within the genomes of three UK bumblebee species. Multiple regions were detected in all of their genomes which appear to have been subject to selective pressures; these signals vary in 
+    	quantity per species but are distributed throughout their genomes and contain genes with diverse functions. These general results are consistent with the idea that bumblebees have been facing multiple stresses from their environment which are placing selective pressures on their genomes \citep{potts_global_2010, outhwaite_agriculture_2022}. 
+    	
+%		nucleotide diversity and amount of selection
+    	
+    	The two widespread species, \emph{B. terrestris} and \emph{B. hortorum}, had a significantly higher level of genomic nucleotide diversity than \emph{B. ruderatus}. This may confer on them greater adaptive potential since natural selection acts on standing variation. Within both of these species, many regions of the genome were identified as being under balancing selection (Figs. \ref{fig:terr_pi}-\ref{fig:hort_pi}); these species appear to be responding to the environmental pressures they are facing \citep{colgan_genomic_2022}.
+    	With greater adaptive potential, these two species may be more resilient to future environmental stresses than their declining relative.
+    	\emph{B. ruderatus} had a significantly lower level of nucleotide diversity which may be conferring less adaptive potential. This agrees with the result of \cite{maebe_microsatellite_2015}, who used microsatellite data to compare genetic diversity among multiple stable and declining bumblebee species. This theory is further supported by the fact that fewer regions of the \emph{B. ruderatus} genome were found to be under selection (Fig. \ref{fig:rud_pi_fst}). 
+		\emph{B. ruderatus} was the only species whose RAD sequences were not aligned to a reference genome of the same species. However the sequences aligned very successfully to the \emph{B. hortorum} genome and so differences in nucleotide diversity and amount of selection  detected should not be caused by this factor.
+%		This species may therefore be in decline due to its relative inability to adapt to the range of pressures exerted on these pollinators.
+    	
+%    	decline and adaptive potential
+    	\emph{B. ruderatus}' population decline could therefore be linked with its relative inability to adapt to the range of pressures exerted on these pollinators. It is possible that this species' lack of adaptive potential has led to its decline, or alternatively that population declines have reduced genetic variation within these populations and therefore lowered adaptive potential; the direction of action is unclear. However, both of these problems will exacerbate the other in a positive feedback loop: population declines will reduce genetic variation further, lowering adaptive potential and making future declines more likely. Therefore, \emph{B. ruderatus} should be of conservation concern; protections should be put in place and threats removed to conserve this pollinator species. Identifying the key types of stress that these bumblebees face is therefore crucial.
+    	
+%    	similar func cats in all 3 spp - all have pesticide responses
+		
+		By identifying adaptations in populations' genomes, it is possible to gain insight into the selection pressures which may be responsible for them.
+%		Although most genes detected within the candidate regions of selection were private to each species, similar functional categories were represented among the species.
+		Similar functional categories were represented by the genes detected within the candidate regions of balancing selection among species. 
+		Neurology-, morphogenesis- and immune-related genes were found in all species to varying extents, potentially representing responses to different selection pressures.
+		
+		In all three species, I have identified genes which are associated with pesticide exposure and resistance. 
+		\cite{bebane_effects_2019} and \cite{colgan_caste-_2019} investigated the effects of two neonicotinoid pesticides on gene expression in \emph{B. terrestris}. 
+		Three, four and six of the genes identified as differentially expressed upon pesticide exposure were found to be under selection in \emph{B. ruderatus}, \emph{B. terrestris}, and \emph{B. hortorum} respectively; most of which were neurology-related. Of note, ionotropic receptor 25a (LOC100644584), involved in Circadian clock resetting was found in \emph{B. ruderatus} and is known to respond to pesticides \citep{chen_drosophila_2015}. ABC transporters were detected in \emph{B. terrestris} (LOC100648854) and \emph{B. hortorum} (LOC100646233); phosphoenolpyruvate carboxykinase (LOC100631088) was under selection in \emph{B. terrestris}; and a cytochrome P450 (LOC100649492) and cadherin-87A (LOC100651590) were found in \emph{B. hortorum}, all of which are thought to confer resistance to pesticides and toxins \citep{bebane_effects_2019, colgan_caste-_2019, haas_phylogenomic_2022}.
+		Additional to these, genes with neurological functions were well represented in all species. With the majority of pesticides being neurotoxins, it is likely that at least some of these gene changes represent response to this key selective pressure  \citep{siviter_quantifying_2018}. To ensure future population stability, especially for \emph{B. ruderatus}, this threat should be removed.
+		
+%		shared region found in all three species
+
+		Also common to all three species was the detection of one region under balancing selection (blue triangle in Figs. \ref{fig:terr_pi}-\ref{fig:rud_pi_fst}). 
+		Here genes relating to neuron development (LOC100648757,
+		LOC100642290), chromosomal replication and RNA processing (LOC110119633, \linebreak LOC100645256), metabolism (LOC100652082, LOC100645016,
+		LOC100645955), cell signalling (LOC100645644) and dosage compensation (LOC100645455) were found \citep{manak_mutation_2002, walker_reduced_2006, saint-pol_new_2017, diao_genomic_2018}. Four of the genes were uncharacterised (LOC100652286, LOC125385800, LOC100645132, LOC125385828) and two long non-coding RNAs were present (LOC105666187, LOC110119615). Within the reach of my literature search, none of these genes have been identified as important candidates of selection in bees. However, a selective signature in three species from this genus suggests that this may be an important region undergoing change. 
+%		Changes in any of these functions could be in response to a range of environmental pressures.
+		This list of 15 genes could therefore provide the basis of future functional tests in bumblebees to determine the specific function and importance of this region.
+
+%		lncRNAs ....?
+%
+%		Within the genomic regions under selection of all three bumblebee species, more than 5\% of the annotated transcripts corresponded to long non-coding RNAs (lncRNA). These genetic features play important roles in gene regulation and expression \citep{marchese_multidimensional_2017}. Altering gene expression has been found to be important in pollinator responses to pesticide exposure and to societal functioning \citep{sadd_genomes_2015}; selection in lncRNAs could therefore represent fine-tuning of expression of a range of genes. However, lncRNAs are widely distributed throughout genomes and so their presence within these selected regions is expected by chance. 
+
+%		most genes private to each spp though -> GO cuticles
+
+		Each species had a variety of genes under selection related to morphogenesis. 
+%    	range of morpho changes in all 3 spp....
+%    	In \emph{B. hortorum}, insect cuticle proteins were significantly enriched within the gene list, with six genes relating to this category (LOC100649166, LOC100649052, LOC100644305, LOC100648472, LOC100650261, LOC100645731). 
+    	In \emph{B. hortorum}, proteins involved in insect cuticle development were significantly enriched within the gene list, with six genes relating to this category (LOC100649166, LOC100649052, LOC100644305, LOC100648472, LOC100650261, LOC100645731). 
+    	Insect cuticle is important in bumblebees and other invertebrates for defence against pathogens, insecticides and adverse environmental conditions \citep{liao_34-dihydroxyphenylacetaldehyde_2018, jackson_local_2020}. Morphogenesis of other insect structures is also dependent on changes in the cuticle \citep{kucharski_novel_2007, sun_genus-wide_2021}. Selection in a large part of the cuticle proteome could therefore represent response to a number of pressures faced by bumblebees. 
+    	% chitin- key structural component of cuticle - found to be high seq diversity and quickly evolving by sun et al 2021
+    	
+%		no other GOs
+    	
+    	No other GO terms were found to be significantly enriched in the genes under selection in any of the species. I believe this may be due to multiple factors. The gene lists identified during these selection scans are of the order of 10s - 100s of genes, which falls within the lower bounds of the number required for this analysis by DAVID \citep{huang_systematic_2009}.
+    	%; and many enrichment analyses detect orders of magnitude more genes, a subset of which contribute to enriched terms \citep{bibid}. 
+    	Additionally, my selection searches are not experimentally driven and as such the genes detected are not all related to the same pressure,
+%    	 but rather represent a large range of genes distributed throughout the genome, 
+    	diluting the signal from any single category. It is expected that not all of the genes found within windows under selection will themselves be under selection. 
+    	%My gene lists consist of genes found within regions of the genome under selection and as such it is expected that not all of the genes will be under selection. 
+    	Finally, many genes within \emph{B. terrestris} are partially or completely functionally unannotated and therefore enrichment analyses do not include these terms. 
+    	%		some sort of conclusion/future improvement
+    	
+%		lots olfactory terr - response to pesticides/other change?
+    	
+    	Olfactory genes have previously been found to have elevated sequence divergence and to be rapidly evolving across the \emph{Bombus} genus \citep{sun_genus-wide_2021}. Although not significantly enriched, several genes relating to olfactory and visual sensing were found in regions of elevated $\pi$ in \emph{B. terrestris}. 
+    	This included genes involved in olfactory perception, learning and memory (LOC100642395, LOC105666389, LOC105666339, LOC100648796, LOC100644148, LOC100649796) as well as photoreceptor and optic nerve development genes (LOC100642252, LOC100643423). 
+    	Functioning of these senses is especially important in social insects for kin recognition and mating behaviours; selection in olfactory function could also be related to changes in food preference potentially driven by land-use change \citep{ayasse_mating_2001, sun_genus-wide_2021}. In honey bees (\emph{Apis mellifera}), neonicotinoid pesticides have been found to adversely affect olfactory and visual functioning \citep{roat_using_2020}.
+    	This adaptation could therefore be driven by a combination of environmental and social factors. 
+    	Three genes related to olfactory processes were detected in \emph{B. hortorum's} gene list but none were found in \emph{B. ruderatus}'.
+    	
+%    	Although similar functional categories were represented in the candidate selection genes of all three species, the majority of genes were private to each species (Fig. \ref{fig:venn_pi}). 
+%		This could suggest that these bumblebees are responding differently to their pressures, or that they are each facing unique threats.     	
+    	
+    	Differences in the genes under selection among the three species could suggest that they are responding differently to their pressures, or that they are each facing unique threats. Range overlaps and shared life histories suggest that these species should be facing similar external pressures; but specific differences in their preferred foraging flora, emergence times or historic ranges could mean that they experience separate threats \citep{powney_widespread_2019}. Their responses to these stresses also depend on the random mutations within their genome so it could be expected that different genes would be under selection; these could still represent response to the same pressures if they have similar functions.
+    	
+%		morpho adaptations for variety functions, diff in each spp + diff levels of immune....maybe combine w small bit about lncRNAs...
+    	
+%		lost unchar - future improvements
+
+		Within the regions of significantly elevated $\pi$ detected in all species, genes with a variety of interesting functions were identified and many of the genes remain uncharacterised. These gene lists should therefore become testable hypotheses for future studies.
+%		provide the basis for future hypothesis testing. 
+		Further annotation of \emph{Bombus} genomes would improve the existing knowledge base; and functional experiments could determine whether these genes are causally involved in adaptation to particular selection pressures. 
+%		similarity searches in other spp to understand unchar genes..!
+		
+%		no directional selection terr and hort - why - future 
+
+		Although regions of significantly elevated $\pi$ were detected in \emph{B. terrestris} and \emph{B. hortorum}, 
+		no regions of significantly reduced $\pi$ were found which would have been indicative of selective sweeps. However, it is unlikely that there have been no selective sweeps within these species' genomes \citep{colgan_genomic_2022}. RAD loci, despite giving a representative impression of the whole genome, only cover a small percentage of it ($<$5\%) so sweeps elsewhere will be missed. Additionally, signatures of sweeps based on $\pi$ degrade over time due to recombination disrupting regions of linkage disequilibrium. To detect selection over a longer period of time or to detect soft sweeps, tests that examine differences between populations are more useful \citep{hohenlohe_using_2010}. Such methods, like PCAdapt and BayeScan, rely on samples being collected from genetically distinct sub-populations; no such structuring was detected in \emph{B. terrestris} or \emph{B. hortorum}. 
+		%		pcadapt + other studies agree w no struct in these spp
+		In future selection analyses using RAD-seq, samples should include genetically distinct populations so that population-differentiation approaches can be utilised \citep{davey_radseq_2010, hohenlohe_population_2012}.
+%		This could allow a deeper investigation of selection signatures and improve confidence in outlier regions and genes.
+
+%		rud dir select
+    	
+    	Six SNPs were identified by more than one population-differentiation test as being under directional selection in \emph{B. ruderatus} (Fig. \ref{fig:rud_heat}). Of these, three were within characterised genes: serine proteinase stubble, protein pangolin and alpha-2b adrenergic receptor. 
+    	These genes are related to immunity and wing morphogenesis; segment polarity during embryogenesis; and neurotransmitter-release regulation respectively \citep{brunner_pangolin_1997, bayer_genetic_2003, zou_comparative_2006, fujita_proteomic_2013}.
+    	Directional selection in these genes could be in response to land-use change affecting foraging and therefore wing structure; to pesticide exposure affecting neurological functioning; or combinations of external factors. Outlier SNPs in these genes were all found to be fixed or almost fixed within the Ouse population, with significantly more genetic variation in the other two populations (Fig. \ref{fig:rud_heat}). This suggests that these genes were subject to soft sweeps \citep{hohenlohe_using_2010}. Alternatively, loss of genetic variation could have occurred at Ouse due to a bottleneck event but this demographic factor would be expected to affect the whole genome whereas these are locus-specific outliers.
+%		relevance of ouse...? - these samples not collected for selection analyses - functions of sites not related to choice - unclear why dir selection at ouse
+%		 all found by bayescan - fewer false positives ++ maybe some missed/low power .... but none found by pca + fst and not bayescan so no
+    	
+%		colgan compare - evaluate radseq
+    	
+    	RAD sequencing provides an appealing alternative to full-coverage methods since it can be used to extract a large number of genetic markers throughout the genomes of a large number of individuals at a relatively lower cost. Many of the results obtained here are comparable to those obtained using whole genome sequencing of \emph{B. terrestris} earlier this year \citep{colgan_genomic_2022}. Comparable levels of genome-wide nucleotide diversity were found (Colgan et al.: 1.51$\times$10\textsuperscript{-3}) as when using RAD-seq (1.82$\times$10\textsuperscript{-3}). \cite{colgan_genomic_2022} found strong signals of selection in neurobiology-related genes and this was the most represented functional category in \emph{B. terrestris}. Selection on genes linked with pesticide susceptibility was also common to both analyses. \cite{colgan_genomic_2022} identified 2883 genes under selection, many more than using this RAD-seq pipeline. 
+    	Colgan et al. also highlighted an evolutionarily conserved region with very low genetic diversity, no RAD loci were present in this region and so this signal was not detected (Fig. \ref{Sfig:terr_chr1}). Overall, RAD-seq has provided a similar impression of selection acting in \emph{B. terrestris}, however specific details were missed. For generating representative views of a whole genome in non-model organisms and gaining insight into the types of selective forces acting on a species, RAD-seq is successful \citep{catchen_unbroken_2017}. 
+    	%		Especially so for non-model organisms which may not have published genomes; here RAD analysis can be invaluable i....
+    	
+%		conclusion
+		This study provides insight into the selection processes occurring within the genomes of \emph{B. terrestris}, \emph{B. hortorum} and \emph{B. ruderatus}. \emph{B. ruderatus} appears less equipped to respond to stresses, as indicated by its lower nucleotide diversity and fewer genomic regions under selection. This may be linked with its population declines in the past, and highlights this species as a cause for concern in the future. 
+%		 this can explain these species' divergent population trends. 
+%		Morphogenesis-related genes were under selection in all three species; 
+		A range of functions were represented by genes under selection, possibly in response to the range of threats these species face.
+		Neurological genes potentially adapting to pressures from pesticide exposure were found within all three species, underlining this as an important threat to these pollinators. 
+%		Most signals of selection were unique to each species, indicating diverse responses to selective pressures. 
+		Overall, RAD-seq analyses can provide a valuable impression of the adaptive potential of non-model organisms; identify candidate genes potentially under selection for future studies; and help to understand the selective processes affecting species' genomes.
+		By gaining understanding in these areas, targets for conservation action can be highlighted.
+		
+		
+%		rud relative inability to adapt - could be linked w past pop declines - and cause for concern in future
+%		neuro and morpho - pesticides highlighted as key threat
+%		radseq good
+%		
+%		These species appear to be responding to a range of environmental pressures with a range of functional adaptations. 
+		
+%		non-model spp...
+    	
+%		future - eg pesticides in the uk...
+    	
+    	
+    	\newpage
+
+
+%		Interestingly, in \emph{B. hortorum} a region of 32 genes was identified with elevated $\pi$, all of which were found by \cite{bibid}HOLLOWAY in a region significantly associated with chalkbrood resistance in \emph{A. mellifera}. chalkbrood is a .... affects .... but does it affect bumbles?
+
+%		In \emph{B. ruderatus}, multiple genes related to flight were found to be under balancing selection. Of note, cathepsin L (LOC100645780) and cyclin G (LOC100652061) were detected; in \emph{D. melanogaster} these genes affect the placement of the air sac which provides oxygen to flight muscles and wing developmental stability respectively \citep{bibid}. 
+
+%		Serine proteinases are important in honey bees for development and immunity; their presence in \emph{A. mellifera} royal jelly has been attributed to their antiseptic properties \citep{zou_comparative_2006, fujita_proteomic_2013}. Stubble was originally classified in \emph{Drosophila} where it plays an important role in wing and leg morphogenesis \citep{bayer_genetic_2003}. In \emph{Drosophila}, protein pangolin is an essential component of the Wnt pathway, where its role in segment polarity is important in embryogenesis \citep{brunner_pangolin_1997}. Finally, alpha-2b adrenergic receptors are critical in neurotransmitter-release regulation. 
+		
+%		FUNC CAT BASED ON LIT SEARCH - POSSIBLY QUITE COARSE, EG CATS NOT SO STRICT + BASED ON OTHER SPP IN SOME CASES - W MORE ANNOTATION AND FUNC ANALYSIS OF BOMBUS -> MORE CERTAINTY, UNDERSTANDING
+%competetion, predation....
+
+%		studies w selection data + env vars eg pesticide exposure, climate, etc - might be able to detangle effects of diff pressures - which genes linked w which / functional analysis of genes...more causative studies
+
+%		potential false positives from blasting eg snp outliers from bayescan, pcadapt (short sequences) to ref genome - could use blast2go instead - theodorou et al 2018
+
+%    important step understanding wide-reaching effects of stress on these pollinators / characterising selection 
+%	list candidate genes - for future research -> improve understanding
+    
+  
+    \section{Data and Code Availability}
+    
+    Data is available from Dr Peter Graystock upon request. Code files are available at \linebreak \url{https://github.com/tashramsden/SelectionBumblebees}.
+    
+  
+  	\include{Supplementary}
+
+    \bibliographystyle{apalike} 
+    \bibliography{thesis_biblio}  % 58! references just for functional categorisation!
+
+    \end{linenumbers}    
+
+
+\end{document}

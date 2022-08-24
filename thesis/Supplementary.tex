@@ -1,0 +1,153 @@
+
+\section{Supplementary}
+
+\setcounter{figure}{0}  % reset figure counter to 1 
+\makeatletter  % and add S in front
+\renewcommand{\thefigure}{S\@arabic\c@figure}
+\makeatother
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.88\linewidth]{supplementary_nuc_div_spp.pdf}
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Nucleotide diversity was different among the bumblebee species} (one-way ANOVA: F(2, 153734) = 8517, p $<$ 1$\times$10\textsuperscript{-10}). All pairwise species comparisons were significantly different (post-hoc Tukey p $<$ 1$\times$10\textsuperscript{-10}), with \emph{B. ruderatus} having the lowest level of nucleotide diversity. Coloured points (n$>$150,000) indicate individual values of $\pi$ and black violins represent a summary of this data.}
+	\label{Sfig:nuc_div_spp}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.88\linewidth]{supplementary_terr_chr1.pdf}
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Smoothed nucleotide diversity ($\pi$) along linkage group one (NC\_063269.1) of \emph{B. terrestris}}. This is a subset of figure \ref{fig:terr_pi}. Points show smoothed $\pi$ calculated at SNPs within RAD loci; a line joins the points since these are smoothed values but some regions contain no data (no points). The green vertical bar highlights the region found by \cite{colgan_genomic_2022} to be evolutionarily conserved and to have extremely low nucleotide diversity. In this analysis no RAD loci were present in this genomic region and so the conserved region could not be detected. The orange vertical bar indicates the region of significantly elevated $\pi$ found in this linkage group (as in Fig. \ref{fig:terr_pi}).}
+	\label{Sfig:terr_chr1}
+\end{figure}
+
+
+\setcounter{table}{0}  % set table counter to 1
+\makeatletter  % and add S in front
+\renewcommand{\thetable}{S\@arabic\c@table}
+\makeatother
+
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Genes found in regions of significantly elevated nucleotide diversity in \emph{B. ruderatus} (Fig. \ref{fig:rud_pi_fst}).} In figure \ref{fig:venn_pi}, any functional category other than immunity, neurology, morphogenesis, lncRNAs or uncharacterised were grouped as "other". Citations are provided for functional categorisation; where absent categorisation was based on GO terms. I have not provided citations for "other" genes here but these are available on request.}
+	\csvautobooktabular{gene_lists/rud_gene_list1.csv}
+	\label{STab:rud_genes}
+\end{table}
+
+% manually add separate parts of table...stupid latex...
+\setcounter{table}{0}  % set table counter to 1 again
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Cont.} \emph{B. ruderatus} genes in regions of significantly elevated $\pi$.}
+	\csvautobooktabular{gene_lists/rud_gene_list2.csv}
+\end{table}
+
+\setcounter{table}{0}  % set table counter to 1 again
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Cont.} \emph{B. ruderatus} genes in regions of significantly elevated $\pi$.}
+	\csvautobooktabular{gene_lists/rud_gene_list3.csv}
+\end{table}
+
+
+\setcounter{table}{1}  % set table counter to 2
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Genes found in regions of significantly elevated nucleotide diversity in \emph{B. hortorum} (Fig. \ref{fig:hort_pi}).} In figure \ref{fig:venn_pi}, any functional category other than immunity, neurology, morphogenesis, lncRNAs or uncharacterised were grouped as "other". Citations are provided for functional categorisation; where absent categorisation was based on GO terms. I have not provided citations for "other" genes here but these are available on request.}
+	\csvautobooktabular{gene_lists/hort_gene_list1.csv}
+	\label{STab:hort_genes}
+\end{table}
+
+\setcounter{table}{1}  % set table counter to 2 again
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Cont.} \emph{B. hortorum} genes in regions of significantly elevated $\pi$.}
+	\csvautobooktabular{gene_lists/hort_gene_list2.csv}
+\end{table}
+
+\setcounter{table}{1}  % set table counter to 2 again
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Cont.} \emph{B. hortorum} genes in regions of significantly elevated $\pi$.}
+	\csvautobooktabular{gene_lists/hort_gene_list3.csv}
+\end{table}
+
+\setcounter{table}{1}  % set table counter to 2 again
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Cont.} \emph{B. hortorum} genes in regions of significantly elevated $\pi$.}
+	\csvautobooktabular{gene_lists/hort_gene_list4.csv}
+\end{table}
+
+\newpage
+
+\setcounter{table}{2}  % set table counter to 3
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Genes found in regions of significantly elevated nucleotide diversity in \emph{B. terrestris} (Fig. \ref{fig:terr_pi}).} In figure \ref{fig:venn_pi}, any functional category other than immunity, neurology, morphogenesis, lncRNAs or uncharacterised were grouped as "other". Citations are provided for functional categorisation; where absent categorisation was based on GO terms. I have not provided citations for "other" genes here but these are available on request.}
+	\csvautobooktabular{gene_lists/terr_gene_list1.csv}
+	\label{STab:terr_genes}
+\end{table}
+
+\setcounter{table}{2}  % set table counter to 3 again
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Cont.} \emph{B. terrestris} genes in regions of significantly elevated $\pi$.}
+	\csvautobooktabular{gene_lists/terr_gene_list2.csv}
+\end{table}
+
+\setcounter{table}{2}  % set table counter to 3 again
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Cont.} \emph{B. terrestris} genes in regions of significantly elevated $\pi$.}
+	\csvautobooktabular{gene_lists/terr_gene_list3.csv}
+\end{table}
+
+\setcounter{table}{2}  % set table counter to 3 again
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Cont.} \emph{B. terrestris} genes in regions of significantly elevated $\pi$.}
+	\csvautobooktabular{gene_lists/terr_gene_list4.csv}
+\end{table}
+
+
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Genes containing SNPs found by BayeScan to be under selection in \emph{B. ruderatus}.} Genes as per NCBI's official gene symbols with corresponding \emph{q-values}; outlier SNPs which were not found within genes have been labelled "No gene".}
+	\csvautobooktabular{gene_lists/rud_bayescan_genes.csv}
+	\label{STab:bayescan_genes}
+\end{table}
+
+\begin{table}[ht!]
+	\centering
+	\footnotesize
+	\captionsetup{width=0.88\linewidth}
+	\caption{\textbf{Genes containing SNPs found by PCAdapt to be under selection in \emph{B. ruderatus}.} Genes as per NCBI's official gene symbols with corresponding Bonferroni-adjusted p-values; outlier SNPs which were not found within genes have been labelled "No gene".}
+	\csvautobooktabular{gene_lists/rud_pcadapt_genes.csv}
+	\label{STab:pcadapt_genes}
+\end{table}
