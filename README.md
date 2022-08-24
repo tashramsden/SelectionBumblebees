@@ -1,4 +1,4 @@
-# Genomic Signals of Selection in three UK Bumblebee Species
+# Signals of Selection in UK Bumblebees
 
 **MSc research project**
 
@@ -9,6 +9,8 @@
 `Stacks` (version 2.62), `BWA` (0.7.17), `SAMtools` (1.15.1), `PGDSpider` (2.1.1.5), `BayeScan` (2.1), `VCFtools` (0.1.16), `PLINK` (1.9)
 
 R packages: `ggplot2`, `stringr`, `gridExtra`, `coda`, `dplyr`, `tidyr`, `viridis`, `readxls`, `cowplot`, `grDevices`, `viridis`, `scales`, `VennDiagram`, `ggpubr`, `pcadapt`, `ggsignif`
+
+
 
 ## Code files
 
@@ -105,6 +107,13 @@ R packages: `ggplot2`, `stringr`, `gridExtra`, `coda`, `dplyr`, `tidyr`, `viridi
 
 * [**make_heatmaps.R**](code/make_heatmaps.R)
   * Calculates dominant allele frequency at BayeScan and PCAdapt outlier SNPs. Plots a heatmap of dominant allele frequency at these outliers across the geographic locations, alongside a table of how many tests detected each outlier. 
+
+
+
+## Thesis folder
+
+The LaTeX code files used to create my full report including supplementary material are available in the [thesis](thesis) folder, as well as the bibtex file (containing all citations, including the 58 used for gene annotation) and a bash script to compile the report. Figures for the report can be created using the code files above.
+
 
 
 ## Author
