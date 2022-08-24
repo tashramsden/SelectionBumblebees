@@ -4,9 +4,7 @@
 
 **Languages**: Bash (version 5.0.17(1)), R (version 4.1.3), LaTeX (pdfTeX version 3.14159265-2.6-1.40.20)
 
-**Dependencies**: 
-
-`Stacks` (version 2.62), `BWA` (0.7.17), `SAMtools` (1.15.1), `PGDSpider` (2.1.1.5), `BayeScan` (2.1), `VCFtools` (0.1.16), `PLINK` (1.9)
+**Dependencies**: `Stacks` (version 2.62), `BWA` (0.7.17), `SAMtools` (1.15.1), `PGDSpider` (2.1.1.5), `BayeScan` (2.1), `VCFtools` (0.1.16), `PLINK` (1.9)
 
 R packages: `ggplot2`, `stringr`, `gridExtra`, `coda`, `dplyr`, `tidyr`, `viridis`, `readxls`, `cowplot`, `grDevices`, `viridis`, `scales`, `VennDiagram`, `ggpubr`, `pcadapt`, `ggsignif`
 
