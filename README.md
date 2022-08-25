@@ -1,4 +1,4 @@
-# Signals of Selection in UK Bumblebees
+# Genomic Signals of Selection in three UK Bumblebee Species
 
 **MSc research project**
 
