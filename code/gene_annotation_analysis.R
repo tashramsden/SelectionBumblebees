@@ -11,11 +11,12 @@ library(ggsignif)
 
 
 ## pi compare between spp ----
-rud_pi <- rud_h_sigma150
+
+rud_pi <- read.csv("../data/populations_smoothed/rud_h_sigma150.csv", header = TRUE)
 rud_pi$spp <- "rud"
-hort_pi <- hort_h_sigma150
+hort_pi <- read.csv("../data/populations_smoothed/hort_h_sigma150.csv", header=T)
 hort_pi$spp <- "hort"
-terr_pi <- terr_t_sigma150
+terr_pi <- read.csv("../data/populations_smoothed/terr_t_sigma150.csv", header=T)
 terr_pi$spp <- "terr"
 
 all_pi <- rbind(rud_pi, hort_pi, terr_pi)

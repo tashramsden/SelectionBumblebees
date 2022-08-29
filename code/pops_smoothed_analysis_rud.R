@@ -219,6 +219,9 @@ ggsave(plot=rud_h_sigma150_pi_plot,
 #        file="../thesis/figures/rud_pi.pdf",
 #        width=16)
 
+write.csv(rud_h_sigma150, 
+          file="../data/populations_smoothed/rud_h_sigma150.csv",
+          row.names = FALSE)
 
 ## for presentation ----
 

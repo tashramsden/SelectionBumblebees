@@ -220,6 +220,10 @@ ggsave(plot=terr_t_sigma150_pi_plot,
        width=16, height=8)
 
 
+write.csv(terr_t_sigma150, 
+          file="../data/populations_smoothed/terr_t_sigma150.csv",
+          row.names = FALSE)
+
 ## for presentation ----
 
 terrplot <- terr_t_sigma150_pi_plot +

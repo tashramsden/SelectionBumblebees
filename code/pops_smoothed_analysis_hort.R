@@ -208,6 +208,9 @@ ggsave(plot=hort_h_sigma150_pi_plot,
        file="../thesis/figures/hort_pi.pdf",
        width=16, height=8)
 
+write.csv(hort_h_sigma150, 
+          file="../data/populations_smoothed/hort_h_sigma150.csv",
+          row.names = FALSE)
 
 ## for presentation ----
 
